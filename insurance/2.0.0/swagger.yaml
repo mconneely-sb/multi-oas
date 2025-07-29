@@ -1,0 +1,157 @@
+openapi: 3.0.1
+info:
+  title: Insurance Product API
+  description: Product API demo
+  version: 2.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/MConneely/insurance-product-api/2.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /products:
+    get:
+      summary: List all products
+      description: Returns all products
+      operationId: getAllProducts
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+              examples:
+                application/json:
+                  value:
+                  - id: "1234"
+                    type: food
+                    price: 42
+        "400":
+          description: Invalid ID supplied
+          content: {}
+    post:
+      summary: Create a product
+      description: Creates a new product
+      operationId: createProduct
+      requestBody:
+        description: Create a new Product
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+            examples:
+              application/json:
+                value:
+                  id: "1234"
+                  type: food
+                  price: 42
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              examples:
+                application/json:
+                  value:
+                    id: "1234"
+                    type: food
+                    price: 42
+        "201":
+          description: created
+  /product/{id}:
+    get:
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductByID
+      parameters:
+      - name: id
+        in: path
+        description: ID of product to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              examples:
+                application/json:
+                  value:
+                    id: "1234"
+                    type: food
+                    price: 42
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: Product not found
+          content: {}
+  /products/{id}/reviews/{reviewId}:
+    get:
+      summary: Get product review
+      operationId: getProductReview
+      parameters:
+      - name: id
+        in: path
+        description: Product ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: reviewId
+        in: path
+        description: Review ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+components:
+  schemas:
+    Product:
+      required:
+      - id
+      - name
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+        price:
+          type: number
+        tags:
+          type: array
+          items:
+            type: string
+        category:
+          type: string
+          description: Product category
+    Error:
+      type: object
+      properties:
+        errorType:
+          type: string
+        message:
+          type: string
+        relatedError:
+          $ref: "#/components/schemas/Error"
