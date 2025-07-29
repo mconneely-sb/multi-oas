@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: Airline Booking API
+  description: API for managing airline bookings
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/MConneely/airline-booking_api/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /bookings:
+    post:
+      summary: Create a new booking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/bookings_body"
+        required: true
+      responses:
+        "201":
+          description: Booking created successfully
+        "400":
+          description: Bad request
+      x-internal: true
+    delete:
+      summary: Delete all bookings
+      responses:
+        "204":
+          description: Bookings deleted successfully
+        "404":
+          description: No bookings found
+  /bookings/{bookingId}:
+    get:
+      summary: Get booking by ID
+      parameters:
+      - name: bookingId
+        in: path
+        description: ID of the booking to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Booking not found
+    delete:
+      summary: Delete booking by ID
+      parameters:
+      - name: bookingId
+        in: path
+        description: ID of the booking to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Booking deleted successfully
+        "404":
+          description: Booking not found
+components:
+  schemas:
+    bookings_body:
+      type: object
+      properties:
+        flight_number:
+          type: string
+        passenger_name:
+          type: string
+        seat_number:
+          type: string
+        departure_date:
+          type: string
+          format: date
+        class:
+          type: string
+          enum:
+          - economy
+          - business
+          - first
+  responses: {}
+  examples: {}
+  requestBodies: {}
