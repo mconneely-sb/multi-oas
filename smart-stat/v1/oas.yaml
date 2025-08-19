@@ -1,0 +1,142 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Smart Thermostat API",
+    "description" : "API for controlling a smart thermostat",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "security" : [ {
+    "ApiKeyAuth" : [ ]
+  } ],
+  "paths" : {
+    "/thermostat" : {
+      "get" : {
+        "summary" : "Retrieve the current thermostat status",
+        "operationId" : "getThermostatStatus",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully retrieved thermostat status",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Thermostat"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Thermostat not found"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Set the thermostat temperature and mode",
+        "operationId" : "setThermostat",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/thermostat_body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Thermostat settings updated successfully"
+          },
+          "400" : {
+            "description" : "Invalid request data"
+          },
+          "404" : {
+            "description" : "Thermostat not found"
+          }
+        }
+      }
+    },
+    "/thermostat/usage" : {
+      "get" : {
+        "summary" : "Retrieve thermostat usage statistics",
+        "operationId" : "getThermostatUsage",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully retrieved thermostat usage",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Usage"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Usage data not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Thermostat" : {
+        "type" : "object",
+        "properties" : {
+          "temperature" : {
+            "type" : "number"
+          },
+          "mode" : {
+            "type" : "string",
+            "enum" : [ "heating", "cooling", "false" ]
+          }
+        }
+      },
+      "Usage" : {
+        "type" : "object",
+        "properties" : {
+          "usage" : {
+            "type" : "number"
+          },
+          "period" : {
+            "type" : "string",
+            "description" : "Time period for usage statistics"
+          }
+        }
+      },
+      "ThermostatModel" : {
+        "type" : "object",
+        "properties" : {
+          "temperature" : {
+            "type" : "number"
+          },
+          "mode" : {
+            "type" : "string",
+            "enum" : [ "heating", "cooling", "false" ]
+          }
+        }
+      },
+      "thermostat_body" : {
+        "type" : "object",
+        "properties" : {
+          "temperature" : {
+            "type" : "number"
+          },
+          "mode" : {
+            "type" : "string",
+            "enum" : [ "heating", "cooling", "false" ]
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "ApiKeyAuth" : {
+        "type" : "apiKey",
+        "name" : "X-API-Key",
+        "in" : "header"
+      }
+    }
+  }
+}
